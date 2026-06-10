@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: 84168422f2c7bb545a1fcacbe0670394
+  m_SerializeEntries:
+  - m_GUID: 1bf7bba24bb432441bdc98d26d49c47e
+    m_Address: Killer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ScoreItems
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fda3ae6d6c22d04094dd52f01930c9c
+    m_Address: Mage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Characters
+    - Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2892c74277471fb4a9bd35072a65ac94
+    m_Address: Star
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ScoreItems
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 301c3badfc5316947ba5edd8442bfeb6
+    m_Address: Bonus
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BonusItems
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6cba385a5adcd4b41b5db93958b0d8cb
+    m_Address: Knight
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Characters
+    - Level1
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8615998d2d9276439ca425734e66619
+    m_Address: Swordsman
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Characters
+    - Level2
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec5cac2b629017d408d4555e81eb8faa
+    m_Address: Base
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ScoreItems
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6c52140c94c5ea4ea8801552613473f
+    m_Address: Archer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Characters
+    - Level2
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5603e4f72ba994149a3c5abb3cf26e3a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c0dbfd7e0f720dd4ab1980c5b8fac294, type: 2}
+    - {fileID: 11400000, guid: 814290b86b4d7f94b86d3c4234a67797, type: 2}
