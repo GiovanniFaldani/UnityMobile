@@ -14,9 +14,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ProfilerTest.unity
     guid: 15ac1641d1ba163449d458d4c56d95ca
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/InterruptionScene.unity
     guid: 6e3f67154eef74141b3532107d97f84b
+  - enabled: 1
+    path: Assets/Esame/Esame.unity
+    guid: 0def069d100a6184abf0a29b9fefbee8
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 8d0e363c788d7dd47859a74aa3672724, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 59eb0e746b5a482408c6be4c0f717229, type: 2}

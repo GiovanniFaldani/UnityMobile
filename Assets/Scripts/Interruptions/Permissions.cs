@@ -79,10 +79,10 @@ public class Permissions : MonoBehaviour
 
         };
 
-        callbacks.PermissionDeniedAndDontAskAgain += permission =>
-        {
-            // l'utente ha negato i permessi e non vuole che glielo chiedo più
-        };
+        //callbacks.PermissionDeniedAndDontAskAgain += permission =>
+        //{
+        //    // l'utente ha negato i permessi e non vuole che glielo chiedo più
+        //};
 
         // poi quando utilizziamo le risorse
 
