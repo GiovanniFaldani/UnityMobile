@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2473643709878608980}
   - component: {fileID: 3877527197388409199}
   m_Layer: 0
-  m_Name: BottomBun
-  m_TagString: Untagged
+  m_Name: Bun
+  m_TagString: Bun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
