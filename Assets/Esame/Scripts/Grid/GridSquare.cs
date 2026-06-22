@@ -1,14 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridSquare
 {
     public bool occupied = false;
-    public Stack<GameObject> squareStack = new Stack<GameObject>();
+    public Stack<Ingredient> ingredientStack = new Stack<Ingredient>();
     public int gridX;
     public int gridY;
     public Vector3 worldPosition;
+
+    private float heightStep = 0.1f;
 
     public GridSquare(Vector3 _worldPosition, int _gridX, int _gridY)
     {
@@ -17,24 +18,68 @@ public class GridSquare
         this.gridY = _gridY;
     }
 
-    public void PushToStack(GameObject toPush)
+    public void PushToStack(Ingredient toPush)
     {
-        squareStack.Push(toPush);
+        ingredientStack.Push(toPush);
+        occupied = true;
     }
 
-    public GameObject PopFromStack()
-    {
-        return squareStack.Pop();
-    }
-
-    // prende uno square in input che viene liberato
     // facendo pop della sua stack e pushandola in quello chiamante
-    public void PushToStackFromSquare(GridSquare toFree)
+    public void PushToStackFromSquare(GridSquare toFree, Vector2 swipeDir)
     {
-        while (toFree.squareStack.Count > 0)
+        if (!occupied) return;
+
+        TouchManager.Instance.SetAllowTouch(false);
+
+        bool bunsPresent = false;
+
+        List<Ingredient> myIngredients = new List<Ingredient>(ingredientStack);
+        foreach (Ingredient ingredient in myIngredients)
         {
-            squareStack.Push(toFree.squareStack.Pop());
+            if (ingredient is Bun)
+            {
+                List<Ingredient> sourceIngredients = new List<Ingredient>(toFree.ingredientStack);
+                foreach (Ingredient ing in sourceIngredients)
+                {
+                    if (ing is Bun)
+                    {
+                        bunsPresent = true;
+                        break;
+                    }
+                }
+            }
         }
-        toFree.occupied = false;
+
+        if (bunsPresent)
+        {
+            if (GameManagerEsame.Instance.CheckCompleteness(this))
+            {
+                while (toFree.ingredientStack.Count > 0)
+                {
+                    Ingredient ing = toFree.ingredientStack.Pop();
+                    ing.MoveToSquare(this);
+                    ingredientStack.Push(ing);
+                }
+                toFree.occupied = false;
+
+                // Caso vittoria, chiama async il reset del livello
+            }
+            else
+            {
+                TouchManager.Instance.SetAllowTouch(true);
+                Debug.Log("Bun is present but level not complete yet.");
+            }
+        }
+        else
+        {
+            Debug.Log($"Moving ingredients from {toFree.gridX},{toFree.gridY} to {gridX},{gridY}");
+            while (toFree.ingredientStack.Count > 0)
+            {
+                Ingredient ing = toFree.ingredientStack.Pop();
+                ing.MoveToSquare(this);
+                ingredientStack.Push(ing);
+            }
+            toFree.occupied = false;
+        }
     }
 }

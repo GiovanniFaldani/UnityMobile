@@ -5,7 +5,7 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 public class TouchManager : MonoBehaviour
 {
-    public TouchManager Instance { get; private set; }
+    public static TouchManager Instance { get; private set; }
 
     [SerializeField] float swipeDeltaThreshold = 10f;
     [SerializeField] MyGrid gameGrid;
@@ -70,6 +70,7 @@ public class TouchManager : MonoBehaviour
         {
             // controllo dove si muove il dito
             Vector2 swipeDelta = touch.delta;
+            Vector2 swipeDir = new Vector2();
             if(
                 Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y) && 
                 Mathf.Abs(swipeDelta.x) > swipeDeltaThreshold
@@ -80,10 +81,12 @@ public class TouchManager : MonoBehaviour
                     swipeStart.gridX + 1 < gameGrid.grid.GetLength(0)
                 ){
                     swipeEnd = gameGrid.grid[swipeStart.gridX + 1, swipeStart.gridY];
+                    swipeDir = new Vector2(1, 0);
                 }
                 else if (swipeStart.gridX - 1 >= 0)
                 {
                     swipeEnd = gameGrid.grid[swipeStart.gridX - 1, swipeStart.gridY];
+                    swipeDir = new Vector2(-1, 0);
                 }
             }
             else if(Mathf.Abs(swipeDelta.y) > swipeDeltaThreshold)
@@ -92,13 +95,14 @@ public class TouchManager : MonoBehaviour
                 if (
                    swipeDelta.y > 0 &&
                    swipeStart.gridY + 1 < gameGrid.grid.GetLength(1)
-               )
-                {
+                ){
                     swipeEnd = gameGrid.grid[swipeStart.gridX, swipeStart.gridY + 1];
+                    swipeDir = new Vector2(0, 1);
                 }
                 else if (swipeStart.gridY - 1 >= 0)
                 {
                     swipeEnd = gameGrid.grid[swipeStart.gridX, swipeStart.gridY - 1];
+                    swipeDir = new Vector2(0, -1);
                 }
             }
             else
@@ -107,10 +111,11 @@ public class TouchManager : MonoBehaviour
             }
 
             // esegui spostamento da swipeStart a swipeEnd
-            Debug.Log("SwipeStart = [" + swipeStart.gridX + ", " + swipeStart.gridY + "]");
+            //Debug.Log("SwipeStart = [" + swipeStart.gridX + ", " + swipeStart.gridY + "]");
             if (swipeEnd != null)
             {
-                Debug.Log("SwipeEnd = [" + swipeEnd.gridX + ", " + swipeEnd.gridY + "]");
+                //Debug.Log("SwipeEnd = [" + swipeEnd.gridX + ", " + swipeEnd.gridY + "]");
+                swipeEnd.PushToStackFromSquare(swipeStart, swipeDir);
             }
         }
 

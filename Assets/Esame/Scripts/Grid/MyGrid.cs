@@ -80,7 +80,7 @@ public class MyGrid : MonoBehaviour
         percentX = Mathf.Clamp01(percentX);
         percentY = Mathf.Clamp01(percentY);
 
-        // recupero gli indici della marice in base alla percentuale
+        // recupero gli indici della matrice in base alla percentuale
         int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         //Debug.Log("X = " + x + " Y = " + y);

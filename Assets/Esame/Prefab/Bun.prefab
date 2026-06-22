@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4243905232930468875}
   - component: {fileID: 2473643709878608980}
   - component: {fileID: 3877527197388409199}
+  - component: {fileID: 686617245106223351}
   m_Layer: 0
   m_Name: Bun
   m_TagString: Bun
@@ -111,3 +112,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &686617245106223351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2374911719831227784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 644f2b5aaeb5fd74ba6941cedea70d7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bun
