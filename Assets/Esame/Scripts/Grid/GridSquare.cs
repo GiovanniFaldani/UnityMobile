@@ -24,6 +24,12 @@ public class GridSquare
         occupied = true;
     }
 
+    public void EmptyStack()
+    {
+        ingredientStack.Clear();
+        occupied = false;
+    }
+
     // facendo pop della sua stack e pushandola in quello chiamante
     public void PushToStackFromSquare(GridSquare toFree, Vector2 swipeDir)
     {
@@ -33,6 +39,7 @@ public class GridSquare
 
         bool bunsPresent = false;
 
+        // TODO controlla condizione opposta da toFree a this, giusto per
         List<Ingredient> myIngredients = new List<Ingredient>(ingredientStack);
         foreach (Ingredient ingredient in myIngredients)
         {
@@ -57,7 +64,7 @@ public class GridSquare
                 while (toFree.ingredientStack.Count > 0)
                 {
                     Ingredient ing = toFree.ingredientStack.Pop();
-                    ing.MoveToSquare(this);
+                    ing.MoveToSquare(this, swipeDir);
                     ingredientStack.Push(ing);
                 }
                 toFree.occupied = false;
@@ -76,7 +83,7 @@ public class GridSquare
             while (toFree.ingredientStack.Count > 0)
             {
                 Ingredient ing = toFree.ingredientStack.Pop();
-                ing.MoveToSquare(this);
+                ing.MoveToSquare(this, swipeDir);
                 ingredientStack.Push(ing);
             }
             toFree.occupied = false;

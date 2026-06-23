@@ -9,8 +9,8 @@ public class MiddleIngredient : Ingredient
         base.Start();
     }
 
-    public new void MoveToSquare(GridSquare destination)
+    public new void MoveToSquare(GridSquare destination, Vector2 swipeDir)
     {
-        base.MoveToSquare(destination);
+        base.MoveToSquare(destination, swipeDir);
     }
 }

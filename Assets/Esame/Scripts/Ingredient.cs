@@ -11,7 +11,7 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
         closestSquare.PushToStack(this);
     }
 
-    public void MoveToSquare(GridSquare destination)
+    public void MoveToSquare(GridSquare destination, Vector2 swipeDir)
     {
         // calcolo la posizione del prossimo elemento nello stack
         Vector3 target = new Vector3(
@@ -22,11 +22,11 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
 
         Vector3 midpoint = (transform.position + target) / 2 + Vector3.up * 1f;
 
-        StartCoroutine(SwipeAnimation(transform.position, midpoint, target));
+        StartCoroutine(SwipeAnimation(transform.position, midpoint, target, swipeDir));
     }
 
     // TODO trovare modo elegante di ruotare in direzione giusta
-    public IEnumerator SwipeAnimation(Vector3 beginning, Vector3 apex, Vector3 end)
+    public IEnumerator SwipeAnimation(Vector3 beginning, Vector3 apex, Vector3 end, Vector2 swipeDir)
     {
         // muovo l'ingrediente 
 
@@ -38,7 +38,10 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
             lerpValue = Mathf.InverseLerp(0, 0.5f, current);
 
             transform.position = Vector3.Lerp(beginning, apex, lerpValue);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.x + 90, 0, 0), lerpValue);
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation, 
+                Quaternion.Euler(transform.rotation.x + (90 * swipeDir.y), 0, transform.rotation.z + (90 * swipeDir.x)), lerpValue
+            );
 
             current += Time.deltaTime;
 
@@ -53,7 +56,10 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
             lerpValue = Mathf.InverseLerp(0, 0.5f, current);
 
             transform.position = Vector3.Lerp(apex, end, lerpValue);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.x + 180, 0, 0), lerpValue);
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation, 
+                Quaternion.Euler(transform.rotation.x + (180 * swipeDir.y), 0, transform.rotation.z + (180 * swipeDir.x)), lerpValue
+            );
 
             current += Time.deltaTime;
 

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class GameManagerEsame : MonoBehaviour
 {
     public static GameManagerEsame Instance { get ; private set; }
+
+    private Dictionary<GameObject, Vector3> startState = new Dictionary<GameObject, Vector3>();
 
     private HashSet<Ingredient> middleIngredientsInScene = new HashSet<Ingredient>();
 
@@ -27,12 +28,26 @@ public class GameManagerEsame : MonoBehaviour
         GenerateLevel();
     }
 
-    public void GenerateLevel()
+    private void GenerateLevel()
     {
         // Comincia piazzando 2 bun in due punti random adiacenti, poi genera N ingredienti attorno
         // Enumera tutti gli ingredienti per controllare se il livello è finito con un set quando i due bun sono uniti
 
         middleIngredientsInScene = FindObjectsByType<MiddleIngredient>(FindObjectsSortMode.None).Cast<Ingredient>().ToHashSet();
+
+        // salvataggio dello start state per reset
+        startState.Clear();
+        Ingredient[] ingredientsInScene = FindObjectsByType<Ingredient>(FindObjectsSortMode.None);
+        foreach (Ingredient ing in ingredientsInScene)
+        {
+            Vector3 startPosition = new Vector3(
+                ing.gameObject.transform.position.x,
+                ing.gameObject.transform.position.y,
+                ing.gameObject.transform.position.z
+            );
+            startState.Add(ing.gameObject, startPosition);
+            Debug.Log("Added to startState: " + ing.name + " at position " + startPosition);
+        }
     }
 
     public bool CheckCompleteness(GridSquare destination)
@@ -51,6 +66,22 @@ public class GameManagerEsame : MonoBehaviour
 
     public void ResetGame()
     {
-        // Reset del livello, distruggi e rigenera
+        Debug.Log("Resetting game to start state...");
+        // Reset del livello, riporta allo stato di partenza
+        foreach (KeyValuePair<GameObject, Vector3> kvp in startState)
+        {
+            Debug.Log("Resetting ingredient: " + kvp.Key.name + " to position " + kvp.Value);
+            GameObject ing = kvp.Key;
+            Vector3 startPosition = kvp.Value;
+
+            // Reset transform
+            ing.transform.position = startPosition;
+            ing.transform.rotation = Quaternion.identity;
+
+            // Reset dello stack su GridSquare
+            GridSquare closestSquare = FindFirstObjectByType<MyGrid>().GetGridSnap(startPosition);
+            closestSquare.EmptyStack();
+            closestSquare.PushToStack(ing.GetComponent<Ingredient>());
+        }
     }
 }

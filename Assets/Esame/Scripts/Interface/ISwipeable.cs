@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface ISwipeable
 {
-    public void MoveToSquare(GridSquare destination);
+    public void MoveToSquare(GridSquare destination, Vector2 swipeDir);
 
 }
