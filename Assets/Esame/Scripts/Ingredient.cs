@@ -25,7 +25,6 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
         StartCoroutine(SwipeAnimation(transform.position, midpoint, target, swipeDir));
     }
 
-    // TODO trovare modo elegante di ruotare in direzione giusta
     public IEnumerator SwipeAnimation(Vector3 beginning, Vector3 apex, Vector3 end, Vector2 swipeDir)
     {
         // muovo l'ingrediente 
@@ -37,6 +36,7 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
         {
             lerpValue = Mathf.InverseLerp(0, 0.5f, current);
 
+            // sposto all'apice dell'arco
             transform.position = Vector3.Lerp(beginning, apex, lerpValue);
             transform.rotation = Quaternion.Lerp(
                 transform.rotation, 
@@ -55,6 +55,7 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
         {
             lerpValue = Mathf.InverseLerp(0, 0.5f, current);
 
+            // sposto alla destinazione dell'arco
             transform.position = Vector3.Lerp(apex, end, lerpValue);
             transform.rotation = Quaternion.Lerp(
                 transform.rotation, 
@@ -65,6 +66,8 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
 
             yield return null;
         }
+
+        // alla fine del movimento setto Allow Touch a vero di nuovo
         TouchManager.Instance.SetAllowTouch(true);
     }
 }

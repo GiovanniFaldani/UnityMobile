@@ -30,9 +30,11 @@ public class GameManagerEsame : MonoBehaviour
 
     private void GenerateLevel()
     {
-        // Comincia piazzando 2 bun in due punti random adiacenti, poi genera N ingredienti attorno
-        // Enumera tutti gli ingredienti per controllare se il livello è finito con un set quando i due bun sono uniti
+        // TODO Comincia piazzando 2 bun in due punti random adiacenti, poi genera N ingredienti attorno
 
+
+
+        // Enumera tutti gli ingredienti per controllare se il livello è finito con un set quando i due bun sono uniti
         middleIngredientsInScene = FindObjectsByType<MiddleIngredient>(FindObjectsSortMode.None).Cast<Ingredient>().ToHashSet();
 
         // salvataggio dello start state per reset
@@ -50,27 +52,26 @@ public class GameManagerEsame : MonoBehaviour
         }
     }
 
-    public bool CheckCompleteness(GridSquare destination)
+    public bool CheckCompleteness(HashSet<Ingredient> ingredientsOnBuns)
     {
-        // controlla se la destinazione dello swipe contiene tutti gli ingredienti del livello
-        HashSet<Ingredient> ingredientsOnDestination = destination.ingredientStack.ToHashSet();
+        // controlla se il set in input contiene tutti gli ingredienti del livello
 
-        if(middleIngredientsInScene.IsSubsetOf(ingredientsOnDestination))
+        if(middleIngredientsInScene.IsSubsetOf(ingredientsOnBuns))
         {
-            Debug.Log("Level complete!");
+            //Debug.Log("Level complete!");
             return true;
         }
-        Debug.Log("Level not complete yet.");
+        //Debug.Log("Level not complete yet.");
         return false;
     }
 
     public void ResetGame()
     {
-        Debug.Log("Resetting game to start state...");
+        // Debug.Log("Resetting game to start state...");
         // Reset del livello, riporta allo stato di partenza
         foreach (KeyValuePair<GameObject, Vector3> kvp in startState)
         {
-            Debug.Log("Resetting ingredient: " + kvp.Key.name + " to position " + kvp.Value);
+            // Debug.Log("Resetting ingredient: " + kvp.Key.name + " to position " + kvp.Value);
             GameObject ing = kvp.Key;
             Vector3 startPosition = kvp.Value;
 

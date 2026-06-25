@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridSquare
@@ -31,24 +32,24 @@ public class GridSquare
     }
 
     // facendo pop della sua stack e pushandola in quello chiamante
-    public void PushToStackFromSquare(GridSquare toFree, Vector2 swipeDir)
+    public List<Ingredient> PushToStackFromSquare(GridSquare toFree, Vector2 swipeDir)
     {
-        if (!occupied) return;
+        if (!occupied) return null;
 
         TouchManager.Instance.SetAllowTouch(false);
 
         bool bunsPresent = false;
 
-        // TODO controlla condizione opposta da toFree a this, giusto per
+        // TODO controlla condizione opposta da toFree a this, e metti insieme gli ingredienti dei due bun per controllare vittoria
         List<Ingredient> myIngredients = new List<Ingredient>(ingredientStack);
-        foreach (Ingredient ingredient in myIngredients)
+        List<Ingredient> sourceIngredients = new List<Ingredient>(toFree.ingredientStack);
+        foreach (Ingredient ing1 in myIngredients)
         {
-            if (ingredient is Bun)
+            if (ing1 is Bun)
             {
-                List<Ingredient> sourceIngredients = new List<Ingredient>(toFree.ingredientStack);
-                foreach (Ingredient ing in sourceIngredients)
+                foreach (Ingredient ing2 in sourceIngredients)
                 {
-                    if (ing is Bun)
+                    if (ing2 is Bun)
                     {
                         bunsPresent = true;
                         break;
@@ -59,7 +60,11 @@ public class GridSquare
 
         if (bunsPresent)
         {
-            if (GameManagerEsame.Instance.CheckCompleteness(this))
+            // unisci gli ingredienti dei due bun in un solo set
+            HashSet<Ingredient> ingredientsOnBuns = new HashSet<Ingredient>(myIngredients);
+            ingredientsOnBuns.UnionWith(sourceIngredients);
+
+            if (GameManagerEsame.Instance.CheckCompleteness(ingredientsOnBuns))
             {
                 while (toFree.ingredientStack.Count > 0)
                 {
@@ -69,17 +74,21 @@ public class GridSquare
                 }
                 toFree.occupied = false;
 
-                // Caso vittoria, chiama async il reset del livello
+                // Caso vittoria, chiama async il next livello e mostra schermata vittoria
+                Debug.Log("Victory.");
+
+                return sourceIngredients;
             }
             else
             {
                 TouchManager.Instance.SetAllowTouch(true);
-                Debug.Log("Bun is present but level not complete yet.");
+                Debug.Log("Buns are present but level not complete yet.");
+                return null;
             }
         }
         else
         {
-            Debug.Log($"Moving ingredients from {toFree.gridX},{toFree.gridY} to {gridX},{gridY}");
+            // Debug.Log($"Moving ingredients from {toFree.gridX},{toFree.gridY} to {gridX},{gridY}");
             while (toFree.ingredientStack.Count > 0)
             {
                 Ingredient ing = toFree.ingredientStack.Pop();
@@ -87,6 +96,8 @@ public class GridSquare
                 ingredientStack.Push(ing);
             }
             toFree.occupied = false;
+
+            return sourceIngredients;
         }
     }
 }

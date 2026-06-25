@@ -1,7 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
+
+struct SwipeMove
+{
+    public GridSquare swipeStart;
+    public GridSquare swipeEnd;
+    public List<Ingredient> movedIngredients;
+
+    public SwipeMove(GridSquare _swipeStart,  GridSquare _swipeEnd, List<Ingredient> _movedIngredients)
+    {
+        this.swipeStart = _swipeStart;
+        this.swipeEnd = _swipeEnd;
+        this.movedIngredients = _movedIngredients;
+    }
+};
 
 public class TouchManager : MonoBehaviour
 {
@@ -13,6 +30,9 @@ public class TouchManager : MonoBehaviour
     
     private GridSquare swipeStart;
     private GridSquare swipeEnd;
+
+    // costruttore default all'inizio così la mossa è vuota
+    private SwipeMove previousMove = new SwipeMove();
 
     private void Awake()
     {
@@ -111,18 +131,52 @@ public class TouchManager : MonoBehaviour
             }
 
             // esegui spostamento da swipeStart a swipeEnd
-            //Debug.Log("SwipeStart = [" + swipeStart.gridX + ", " + swipeStart.gridY + "]");
             if (swipeEnd != null)
             {
-                //Debug.Log("SwipeEnd = [" + swipeEnd.gridX + ", " + swipeEnd.gridY + "]");
-                swipeEnd.PushToStackFromSquare(swipeStart, swipeDir);
+                List<Ingredient> moved = swipeEnd.PushToStackFromSquare(swipeStart, swipeDir);
+                if (moved != null)
+                    previousMove = new SwipeMove(swipeStart, swipeEnd, moved);
             }
         }
 
     }
 
+    public void UndoPreviousMove()
+    {
+        if (previousMove.swipeEnd == null || previousMove.swipeEnd.ingredientStack.Count <= 0) return;
+
+        allowTouch = false;
+        // ritorna indietro tutti gli ingredienti mossi nella previous move
+
+        Ingredient ing = previousMove.swipeEnd.ingredientStack.Peek();
+        while(previousMove.movedIngredients.Contains(ing))
+        {
+            ing = previousMove.swipeEnd.ingredientStack.Pop();
+            ing.MoveToSquare(
+                previousMove.swipeStart,
+                new Vector2(
+                    previousMove.swipeStart.gridX - previousMove.swipeEnd.gridX,
+                    previousMove.swipeStart.gridY - previousMove.swipeEnd.gridY
+                )
+            );
+            previousMove.swipeStart.PushToStack(ing);
+            previousMove.swipeStart.occupied = true;
+
+            // controlla il prossimo ingrediente
+            ing = previousMove.swipeEnd.ingredientStack.Peek();
+        }
+
+        // sovrascrivi memoria della mossa precedente
+        previousMove = new SwipeMove();
+    }
+
     public void SetAllowTouch(bool value)
     {
         allowTouch = value;
+    }
+
+    public bool GetAllowTouch()
+    {
+        return allowTouch;
     }
 }
