@@ -20,7 +20,7 @@ public class UIFuncs : MonoBehaviour
     {
         if (TouchManager.Instance.GetAllowTouch())
         {
-
+            GameManagerEsame.Instance.GenerateLevel();
         }
     }
 }
