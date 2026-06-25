@@ -38,16 +38,18 @@ public class GridSquare
 
         TouchManager.Instance.SetAllowTouch(false);
 
+        bool bunPresent = false;
         bool bunsPresent = false;
 
         // TODO controlla condizione opposta da toFree a this, e metti insieme gli ingredienti dei due bun per controllare vittoria
         List<Ingredient> myIngredients = new List<Ingredient>(ingredientStack);
         List<Ingredient> sourceIngredients = new List<Ingredient>(toFree.ingredientStack);
-        foreach (Ingredient ing1 in myIngredients)
+        foreach (Ingredient ing1 in sourceIngredients)
         {
             if (ing1 is Bun)
             {
-                foreach (Ingredient ing2 in sourceIngredients)
+                bunPresent = true;
+                foreach (Ingredient ing2 in myIngredients)
                 {
                     if (ing2 is Bun)
                     {
@@ -86,6 +88,12 @@ public class GridSquare
                 return null;
             }
         }
+        else if (bunPresent)
+        {
+            TouchManager.Instance.SetAllowTouch(true);
+            Debug.Log("You can't move a bun unless all ingredients are placed on them!");
+            return null;
+        }
         else
         {
             // Debug.Log($"Moving ingredients from {toFree.gridX},{toFree.gridY} to {gridX},{gridY}");
@@ -96,7 +104,7 @@ public class GridSquare
                 ingredientStack.Push(ing);
             }
             toFree.occupied = false;
-
+            TouchManager.Instance.SetAllowTouch(true);
             return sourceIngredients;
         }
     }

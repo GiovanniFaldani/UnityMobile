@@ -132,8 +132,11 @@ public class TouchManager : MonoBehaviour
             if (swipeEnd != null)
             {
                 List<Ingredient> moved = swipeEnd.PushToStackFromSquare(swipeStart, swipeDir);
-                if (moved != null)
+                if (moved != null && moved.Count > 0)
+                {
+                    Debug.Log($"Registered move: {swipeStart} to {swipeEnd}. Moved: {moved.Count}");
                     previousMove = new SwipeMove(swipeStart, swipeEnd, moved);
+                }
             }
         }
 
@@ -145,6 +148,7 @@ public class TouchManager : MonoBehaviour
 
         allowTouch = false;
         // ritorna indietro tutti gli ingredienti mossi nella previous move
+        Debug.Log($"Undoing move: {previousMove.swipeStart} to {previousMove.swipeEnd}. Moved: {previousMove.movedIngredients.Count}");
 
         Ingredient ing = previousMove.swipeEnd.ingredientStack.Peek();
         while(previousMove.movedIngredients.Contains(ing))

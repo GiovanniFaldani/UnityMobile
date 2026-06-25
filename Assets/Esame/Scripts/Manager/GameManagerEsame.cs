@@ -52,8 +52,7 @@ public class GameManagerEsame : MonoBehaviour
            for(int y = 0; y < ySize; y++)
             {
                 availablePositions.Add(new Vector2(x, y));
-                gameGrid.grid[x, y].ingredientStack.Clear();
-                gameGrid.grid[x, y].occupied = false;
+                gameGrid.grid[x, y].EmptyStack();
             }
         }
 
