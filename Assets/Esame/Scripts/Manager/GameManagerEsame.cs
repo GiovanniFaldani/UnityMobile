@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GameManagerEsame : MonoBehaviour
 {
@@ -24,6 +23,7 @@ public class GameManagerEsame : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }
     }
 
@@ -101,8 +101,8 @@ public class GameManagerEsame : MonoBehaviour
             takenpositions.Add(ingredientPoint);
         }
 
-        // Enumera tutti gli ingredienti per, in futuro, controllare se il livello è finito con un set quando i due bun sono uniti
-        Debug.Log($"Middle Ingredients In Scene Size: {middleIngredientsInScene.Count}");
+        // Debug.Log($"Middle Ingredients In Scene Size: {middleIngredientsInScene.Count}");
+        TouchManager.Instance.SetAllowTouch(true);
     }
 
     public bool CheckCompleteness(HashSet<Ingredient> ingredientsOnBuns)
@@ -117,7 +117,7 @@ public class GameManagerEsame : MonoBehaviour
     {
         // Debug.Log("Resetting game to start state...");
         // Reset del livello, riporta allo stato di partenza
-        Debug.Log($"Start State size: {startState.Count}");
+        // Debug.Log($"Start State size: {startState.Count}");
         foreach (KeyValuePair<GameObject, Vector3> kvp in startState)
         {
             // Debug.Log("Resetting ingredient: " + kvp.Key.name + " to position " + kvp.Value);
@@ -133,5 +133,28 @@ public class GameManagerEsame : MonoBehaviour
             closestSquare.EmptyStack();
             closestSquare.PushToStack(ing.GetComponent<Ingredient>());
         }
+    }
+
+    // Vittoria
+    public void WinGame()
+    {
+        // aspetta che l'animazione finisca e poi mostra lo schermo di vittoria
+        StartCoroutine(WaitForAnimation());
+    }
+
+    //Wait for animation to finish before calling victory screen
+    private IEnumerator WaitForAnimation()
+    {
+        yield return new WaitForSeconds(1);
+        FindFirstObjectByType<UIFuncs>().DisplayVictoryScreen();
+    }
+
+    // Chiudi il gioco
+    public void CloseGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        Application.Quit();
     }
 }

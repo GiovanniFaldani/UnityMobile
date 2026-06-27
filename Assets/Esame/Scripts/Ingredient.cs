@@ -5,7 +5,7 @@ public abstract class Ingredient : MonoBehaviour, ISwipeable
 {
     protected void Start()
     {
-        Debug.Log("Ingredient Start");
+        // Debug.Log("Ingredient Start");
         MyGrid grid = FindFirstObjectByType<MyGrid>();
         GridSquare closestSquare = grid.GetGridSnap(transform.position);
         closestSquare.PushToStack(this);

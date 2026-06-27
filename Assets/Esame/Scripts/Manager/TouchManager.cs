@@ -24,7 +24,7 @@ public class TouchManager : MonoBehaviour
 
     [SerializeField] float swipeDeltaThreshold = 10f;
     [SerializeField] MyGrid gameGrid;
-    [SerializeField] private bool allowTouch = true;
+    [SerializeField] private bool allowTouch = false;
     
     private GridSquare swipeStart;
     private GridSquare swipeEnd;
@@ -41,6 +41,7 @@ public class TouchManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }
     }
 
@@ -134,7 +135,7 @@ public class TouchManager : MonoBehaviour
                 List<Ingredient> moved = swipeEnd.PushToStackFromSquare(swipeStart, swipeDir);
                 if (moved != null && moved.Count > 0)
                 {
-                    Debug.Log($"Registered move: {swipeStart} to {swipeEnd}. Moved: {moved.Count}");
+                    // Debug.Log($"Registered move: {swipeStart} to {swipeEnd}. Moved: {moved.Count}");
                     previousMove = new SwipeMove(swipeStart, swipeEnd, moved);
                 }
             }
@@ -148,7 +149,7 @@ public class TouchManager : MonoBehaviour
 
         allowTouch = false;
         // ritorna indietro tutti gli ingredienti mossi nella previous move
-        Debug.Log($"Undoing move: {previousMove.swipeStart} to {previousMove.swipeEnd}. Moved: {previousMove.movedIngredients.Count}");
+        // Debug.Log($"Undoing move: {previousMove.swipeStart} to {previousMove.swipeEnd}. Moved: {previousMove.movedIngredients.Count}");
 
         Ingredient ing = previousMove.swipeEnd.ingredientStack.Peek();
         while(previousMove.movedIngredients.Contains(ing))

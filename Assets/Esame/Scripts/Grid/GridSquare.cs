@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class GridSquare
@@ -9,8 +9,6 @@ public class GridSquare
     public int gridX;
     public int gridY;
     public Vector3 worldPosition;
-
-    private float heightStep = 0.1f;
 
     public GridSquare(Vector3 _worldPosition, int _gridX, int _gridY)
     {
@@ -31,7 +29,7 @@ public class GridSquare
         occupied = false;
     }
 
-    // facendo pop della sua stack e pushandola in quello chiamante
+    // Sposta gli ingredienti facendo pop della sorgente e pushandola sulla propria stack
     public List<Ingredient> PushToStackFromSquare(GridSquare toFree, Vector2 swipeDir)
     {
         if (!occupied) return null;
@@ -41,7 +39,7 @@ public class GridSquare
         bool bunPresent = false;
         bool bunsPresent = false;
 
-        // TODO controlla condizione opposta da toFree a this, e metti insieme gli ingredienti dei due bun per controllare vittoria
+        // controlla condizione vittoria in modo simmetrico tra destinazione e sorgente
         List<Ingredient> myIngredients = new List<Ingredient>(ingredientStack);
         List<Ingredient> sourceIngredients = new List<Ingredient>(toFree.ingredientStack);
         foreach (Ingredient ing1 in sourceIngredients)
@@ -77,21 +75,21 @@ public class GridSquare
                 toFree.occupied = false;
 
                 // Caso vittoria, chiama async il next livello e mostra schermata vittoria
-                Debug.Log("Victory.");
-
+                // Debug.Log("Victory.");
+                GameManagerEsame.Instance.WinGame();
                 return sourceIngredients;
             }
             else
             {
                 TouchManager.Instance.SetAllowTouch(true);
-                Debug.Log("Buns are present but level not complete yet.");
+                // Debug.Log("Buns are present but level not complete yet.");
                 return null;
             }
         }
         else if (bunPresent)
         {
             TouchManager.Instance.SetAllowTouch(true);
-            Debug.Log("You can't move a bun unless all ingredients are placed on them!");
+            // Debug.Log("You can't move a bun unless all ingredients are placed on them!");
             return null;
         }
         else
